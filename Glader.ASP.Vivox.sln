@@ -5,7 +5,11 @@ VisualStudioVersion = 16.0.29009.5
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "src", "src", "{5CD55EC1-31DD-4BBD-A109-D0662A9E1DDC}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Glader.ASP.Vivox.Models", "src\Glader.ASP.Vivox.Models\Glader.ASP.Vivox.Models.csproj", "{D7218DB1-D760-4AB9-98B9-634CEC52A4A1}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Glader.ASP.Vivox.Models", "src\Glader.ASP.Vivox.Models\Glader.ASP.Vivox.Models.csproj", "{D7218DB1-D760-4AB9-98B9-634CEC52A4A1}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Glader.ASP.Vivox.Client", "src\Glader.ASP.Vivox.Client\Glader.ASP.Vivox.Client.csproj", "{2A05DC04-2150-425C-A165-D89759228689}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Glader.ASP.Vivox.Server", "src\Glader.ASP.Vivox.Server\Glader.ASP.Vivox.Server.csproj", "{F4E4C433-5DEE-49C8-A87C-9F48F6FF16E4}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -17,12 +21,22 @@ Global
 		{D7218DB1-D760-4AB9-98B9-634CEC52A4A1}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{D7218DB1-D760-4AB9-98B9-634CEC52A4A1}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{D7218DB1-D760-4AB9-98B9-634CEC52A4A1}.Release|Any CPU.Build.0 = Release|Any CPU
+		{2A05DC04-2150-425C-A165-D89759228689}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{2A05DC04-2150-425C-A165-D89759228689}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{2A05DC04-2150-425C-A165-D89759228689}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{2A05DC04-2150-425C-A165-D89759228689}.Release|Any CPU.Build.0 = Release|Any CPU
+		{F4E4C433-5DEE-49C8-A87C-9F48F6FF16E4}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{F4E4C433-5DEE-49C8-A87C-9F48F6FF16E4}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{F4E4C433-5DEE-49C8-A87C-9F48F6FF16E4}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{F4E4C433-5DEE-49C8-A87C-9F48F6FF16E4}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
 	EndGlobalSection
 	GlobalSection(NestedProjects) = preSolution
 		{D7218DB1-D760-4AB9-98B9-634CEC52A4A1} = {5CD55EC1-31DD-4BBD-A109-D0662A9E1DDC}
+		{2A05DC04-2150-425C-A165-D89759228689} = {5CD55EC1-31DD-4BBD-A109-D0662A9E1DDC}
+		{F4E4C433-5DEE-49C8-A87C-9F48F6FF16E4} = {5CD55EC1-31DD-4BBD-A109-D0662A9E1DDC}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {457498ED-C637-4296-A045-67C1F9102D32}
