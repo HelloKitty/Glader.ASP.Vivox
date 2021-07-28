@@ -23,7 +23,7 @@ namespace GladMMO
 		[NoResponseCache]
 		[HttpPost("proximity/join")]
 		public async Task<ResponseModel<VivoxChannelJoinResponse, VivoxLoginResponseCode>> JoinZoneProximityChat(
-			[FromServices] ITrinityCharactersRepository characterRepository,
+			[FromServices] ICharactersDataRepository characterRepository,
 			[FromServices] IFactoryCreatable<VivoxTokenClaims, VivoxTokenClaimsCreationContext> claimsFactory,
 			[FromServices] IVivoxTokenSignService signService)
 		{
@@ -81,7 +81,7 @@ namespace GladMMO
 			return BuildSuccessfulResponseModel(new VivoxChannelJoinResponse(signService.CreateSignature(claims), claims.DestinationSIPURI));
 		}*/
 
-		private static async Task<int> RetrieveSessionCharacterIdAsync(ITrinityCharactersRepository characterRepository, int accountId)
+		private static async Task<int> RetrieveSessionCharacterIdAsync(ICharactersDataRepository characterRepository, int accountId)
 		{
 			//TODO: Technically a race condition here.
 			return await characterRepository.RetrieveCharacterIdByAccountIdAsync(accountId);

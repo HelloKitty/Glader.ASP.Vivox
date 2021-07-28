@@ -23,7 +23,7 @@ namespace GladMMO
 		[AuthorizeJwt]
 		[NoResponseCache]
 		[HttpPost("Login")]
-		public async Task<ResponseModel<string, VivoxLoginResponseCode>> LoginVivox([FromServices] ITrinityCharactersRepository characterRepository,
+		public async Task<ResponseModel<string, VivoxLoginResponseCode>> LoginVivox([FromServices] ICharactersDataRepository characterRepository,
 			[FromServices] IFactoryCreatable<VivoxTokenClaims, VivoxTokenClaimsCreationContext> claimsFactory,
 			[FromServices] IVivoxTokenSignService signService)
 		{
@@ -43,7 +43,7 @@ namespace GladMMO
 			return Success<string, VivoxLoginResponseCode>(signService.CreateSignature(claims));
 		}
 
-		private static async Task<int> RetrieveSessionCharacterIdAsync(ITrinityCharactersRepository characterRepository, int accountId)
+		private static async Task<int> RetrieveSessionCharacterIdAsync(ICharactersDataRepository characterRepository, int accountId)
 		{
 			//TODO: Technically a race condition here.
 			return await characterRepository.RetrieveCharacterIdByAccountIdAsync(accountId);
