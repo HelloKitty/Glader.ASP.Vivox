@@ -13,10 +13,17 @@ namespace Glader.ASP.Vivox
 		//TODO: Handle this better by injecting and hiding where it comes from
 		private static string VIVOX_API_KEY { get; }
 
+		private IVivoxAPIKeyRepository APIKeyProvider { get; }
+
 		static DefaultLocalVivoxTokenSigningService()
 		{
 			//TODO: Make enviroment variable name a constant somewhere.
 			VIVOX_API_KEY = Environment.GetEnvironmentVariable(SecurityEnvironmentVariables.VIVOX_API_KEY_PATH);
+		}
+
+		public DefaultLocalVivoxTokenSigningService(IVivoxAPIKeyRepository apiKeyProvider)
+		{
+			APIKeyProvider = apiKeyProvider ?? throw new ArgumentNullException(nameof(apiKeyProvider));
 		}
 
 		public string CreateSignature(VivoxTokenClaims claims)
