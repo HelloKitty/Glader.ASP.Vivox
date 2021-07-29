@@ -7,7 +7,7 @@ using Glader.ASP.Vivox;
 using Glader.Essentials;
 using Refit;
 
-namespace GladMMO
+namespace Glader.ASP.Vivox
 {
 	//TODO: Automate user-agent SDK version headers
 	[Headers("User-Agent: Glader")]

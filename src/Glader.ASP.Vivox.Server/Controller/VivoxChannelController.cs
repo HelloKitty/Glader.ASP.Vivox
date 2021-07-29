@@ -9,7 +9,7 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
 using Newtonsoft.Json;
 
-namespace GladMMO
+namespace Glader.ASP.Vivox
 {
 	[Route("api/[controller]")]
 	public class VivoxChannelController : AuthorizationReadyController
