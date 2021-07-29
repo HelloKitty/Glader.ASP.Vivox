@@ -5,6 +5,20 @@
     <langversion>preview</langversion>
   </PropertyGroup>
 
+  <PropertyGroup>
+    <RootNamespace>Glader.ASP.Vivox</RootNamespace>
+    <Version>0.0.1</Version>
+    <Authors>Andrew Blakely, Glader</Authors>
+    <Product>Glader.ASP.Vivox</Product>
+    <Description>Glader.ASP.Vivox is an ASP Core, EntityFramework, Refit-based and JSON-based Vivox library.</Description>
+    <PackageProjectUrl>https://github.com/HelloKitty/Glader.ASP.RPGCharacter</PackageProjectUrl>
+    <RepositoryUrl>https://github.com/HelloKitty/Glader.ASP.RPGCharacter</RepositoryUrl>
+    <RepositoryType>git</RepositoryType>
+    <PackageTags>Glader ASP Vivox</PackageTags>
+    <GeneratePackageOnBuild>true</GeneratePackageOnBuild>
+    <IncludeSymbols>true</IncludeSymbols>
+  </PropertyGroup>
+
   <ItemGroup>
     <PackageReference Include="Glader.Essentials.Models" Version="2.2.77" />
   </ItemGroup>
