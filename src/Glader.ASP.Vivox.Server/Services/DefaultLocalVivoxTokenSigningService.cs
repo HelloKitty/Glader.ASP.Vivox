@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Security.Cryptography;
+using System.Threading;
 using System.Threading.Tasks;
 using Microsoft.IdentityModel.Tokens;
 using Newtonsoft.Json;
@@ -10,23 +11,15 @@ namespace Glader.ASP.Vivox
 {
 	public sealed class DefaultLocalVivoxTokenSigningService : IVivoxTokenSignService
 	{
-		//TODO: Handle this better by injecting and hiding where it comes from
-		private static string VIVOX_API_KEY { get; }
-
 		private IVivoxAPIKeyRepository APIKeyProvider { get; }
-
-		static DefaultLocalVivoxTokenSigningService()
-		{
-			//TODO: Make enviroment variable name a constant somewhere.
-			VIVOX_API_KEY = Environment.GetEnvironmentVariable(SecurityEnvironmentVariables.VIVOX_API_KEY_PATH);
-		}
 
 		public DefaultLocalVivoxTokenSigningService(IVivoxAPIKeyRepository apiKeyProvider)
 		{
 			APIKeyProvider = apiKeyProvider ?? throw new ArgumentNullException(nameof(apiKeyProvider));
 		}
 
-		public string CreateSignature(VivoxTokenClaims claims)
+		/// <inheritdoc />
+		public async Task<string> CreateSignatureAsync(VivoxTokenClaims claims, CancellationToken token = default)
 		{
 			if (claims == null) throw new ArgumentNullException(nameof(claims));
 
@@ -38,7 +31,7 @@ namespace Glader.ASP.Vivox
 			//e30 is {} header
 			string signable = $"e30.{claimsString}";
 
-			return $"{signable}.{SHA256Hash(VIVOX_API_KEY, signable)}";
+			return $"{signable}.{SHA256Hash(await APIKeyProvider.RetrieveKey(token), signable)}";
 		}
 
 		private static string SHA256Hash(string secret, string message)
@@ -50,11 +43,9 @@ namespace Glader.ASP.Vivox
 			byte[] keyByte = System.Text.Encoding.ASCII.GetBytes(secret);
 			byte[] messageBytes = System.Text.Encoding.ASCII.GetBytes(message);
 
-			using(var hmacsha256 = new HMACSHA256(keyByte))
-			{
-				byte[] hashmessage = hmacsha256.ComputeHash(messageBytes);
-				return Base64UrlEncoder.Encode(hashmessage);
-			}
+			using var hmacsha256 = new HMACSHA256(keyByte);
+			byte[] hashmessage = hmacsha256.ComputeHash(messageBytes);
+			return Base64UrlEncoder.Encode(hashmessage);
 		}
 	}
 }

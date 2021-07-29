@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Threading;
 using System.Threading.Tasks;
 
 namespace Glader.ASP.Vivox
@@ -15,7 +16,8 @@ namespace Glader.ASP.Vivox
 		/// useable.
 		/// </summary>
 		/// <param name="claims">The token claims</param>
+		/// <param name="token">Cancel token.</param>
 		/// <returns>The signed authorization token in string form.</returns>
-		string CreateSignature(VivoxTokenClaims claims);
+		Task<string> CreateSignatureAsync(VivoxTokenClaims claims, CancellationToken token = default);
 	}
 }

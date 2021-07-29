@@ -40,7 +40,7 @@ namespace GladMMO
 
 			//We don't send it back in a JSON form even though it's technically a JSON object
 			//because the client just needs it as a raw string anyway to put through the Vivox client API.
-			return Success<string, VivoxLoginResponseCode>(signService.CreateSignature(claims));
+			return Success<string, VivoxLoginResponseCode>(await signService.CreateSignatureAsync(claims));
 		}
 
 		private static async Task<int> RetrieveSessionCharacterIdAsync(ICharactersDataRepository characterRepository, int accountId)

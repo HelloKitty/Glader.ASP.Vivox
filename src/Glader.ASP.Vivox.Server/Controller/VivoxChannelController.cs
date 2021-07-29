@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Threading;
 using System.Threading.Tasks;
 using Glader.ASP.Vivox;
 using Glader.Essentials;
@@ -25,13 +26,13 @@ namespace GladMMO
 		public async Task<ResponseModel<VivoxChannelJoinResponse, VivoxLoginResponseCode>> JoinZoneProximityChat(
 			[FromServices] ICharactersDataRepository characterRepository,
 			[FromServices] IFactoryCreatable<VivoxTokenClaims, VivoxTokenClaimsCreationContext> claimsFactory,
-			[FromServices] IVivoxTokenSignService signService)
+			[FromServices] IVivoxTokenSignService signService, CancellationToken token = default)
 		{
 			int accountId = this.ClaimsReader.GetAccountId<int>(User);
 
 			//If the user doesn't actually have a claimed session in the game
 			//then we shouldn't log them into Vivox.
-			if (!await characterRepository.AccountHasActiveSessionAsync(accountId))
+			if (!await characterRepository.AccountHasActiveSessionAsync(accountId, token))
 				return Failure<VivoxChannelJoinResponse, VivoxLoginResponseCode>(VivoxLoginResponseCode.NoActiveCharacterSession);
 
 			int characterId = await RetrieveSessionCharacterIdAsync(characterRepository, accountId);
@@ -47,7 +48,7 @@ namespace GladMMO
 
 			//We don't send it back in a JSON form even though it's technically a JSON object
 			//because the client just needs it as a raw string anyway to put through the Vivox client API.
-			return Success<VivoxChannelJoinResponse, VivoxLoginResponseCode>(new VivoxChannelJoinResponse(signService.CreateSignature(claims), claims.DestinationSIPURI));
+			return Success<VivoxChannelJoinResponse, VivoxLoginResponseCode>(new VivoxChannelJoinResponse(await signService.CreateSignatureAsync(claims, token), claims.DestinationSIPURI));
 		}
 
 		/*[AuthorizeJwt]
