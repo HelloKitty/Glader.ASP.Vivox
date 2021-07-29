@@ -37,7 +37,7 @@ namespace GladMMO
 
 			int characterId = await RetrieveSessionCharacterIdAsync(characterRepository, accountId);
 
-			ICharacterSessionInfo session = await characterRepository.RetrieveSessionInfoAsync(characterId);
+			ICharacterSessionInfo session = await characterRepository.RetrieveSessionInfoAsync(characterId, token);
 
 			//Players in the same zone will all join the same proximity channel such as Prox-1.
 			//They can use this for proximity text and voice chat.

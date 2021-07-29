@@ -25,13 +25,13 @@ namespace GladMMO
 		[HttpPost("Login")]
 		public async Task<ResponseModel<string, VivoxLoginResponseCode>> LoginVivox([FromServices] ICharactersDataRepository characterRepository,
 			[FromServices] IFactoryCreatable<VivoxTokenClaims, VivoxTokenClaimsCreationContext> claimsFactory,
-			[FromServices] IVivoxTokenSignService signService)
+			[FromServices] IVivoxTokenSignService signService, CancellationToken token = default)
 		{
 			int accountId = this.ClaimsReader.GetAccountId<int>(User);
 
 			//If the user doesn't actually have a claimed session in the game
 			//then we shouldn't log them into Vivox.
-			if (!await characterRepository.AccountHasActiveSessionAsync(accountId))
+			if (!await characterRepository.AccountHasActiveSessionAsync(accountId, token))
 				return Failure<string, VivoxLoginResponseCode>(VivoxLoginResponseCode.NoActiveCharacterSession);
 
 			int characterId = await RetrieveSessionCharacterIdAsync(characterRepository, accountId);
@@ -40,7 +40,7 @@ namespace GladMMO
 
 			//We don't send it back in a JSON form even though it's technically a JSON object
 			//because the client just needs it as a raw string anyway to put through the Vivox client API.
-			return Success<string, VivoxLoginResponseCode>(await signService.CreateSignatureAsync(claims));
+			return Success<string, VivoxLoginResponseCode>(await signService.CreateSignatureAsync(claims, token));
 		}
 
 		private static async Task<int> RetrieveSessionCharacterIdAsync(ICharactersDataRepository characterRepository, int accountId)
