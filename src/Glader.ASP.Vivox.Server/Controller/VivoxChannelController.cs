@@ -44,7 +44,7 @@ namespace Glader.ASP.Vivox
 			//TODO: Support cases where a character is put into a different map than the DB says it should be in
 			//TODO: Support instances, right now all instances share the same channel.
 			//TODO: Use a factory for channel name generation maybe?
-			VivoxTokenClaims claims = claimsFactory.Create(new VivoxTokenClaimsCreationContext(characterId, VivoxAction.JoinChannel, new VivoxChannelData(true, $"Prox-{session.MapId}")));
+			VivoxTokenClaims claims = claimsFactory.Create(new VivoxTokenClaimsCreationContext(characterId, VivoxAction.JoinChannel, new VivoxChannelData(true, new MapChannelNameBuilder(true, session.MapId).ToString())));
 
 			//We don't send it back in a JSON form even though it's technically a JSON object
 			//because the client just needs it as a raw string anyway to put through the Vivox client API.
