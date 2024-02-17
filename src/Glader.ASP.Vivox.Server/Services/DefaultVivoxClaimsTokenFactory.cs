@@ -1,18 +1,9 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
 using System.Text;
-using System.Threading.Tasks;
-using Glader.Essentials;
 
 namespace Glader.ASP.Vivox
 {
-	public interface IVivoxClaimsTokenFactory : IFactoryCreatable<VivoxTokenClaims, VivoxTokenClaimsCreationContext>
-	{
-
-	}
-
-	public sealed class VivoxClaimsTokenFactory : IVivoxClaimsTokenFactory
+	public sealed class DefaultVivoxClaimsTokenFactory : IVivoxClaimsTokenFactory
 	{
 		//TODO: Make Issuer configurable
 		private static string VIVOX_ISSUER = "vrguardian-vrg-dev";
