@@ -28,6 +28,10 @@ namespace Glader
 			MapId = mapId;
 		}
 
+		/// <summary>
+		/// Provides the channel name.
+		/// </summary>
+		/// <returns>Channel name.</returns>
 		public override string ToString()
 		{
 			if (IsProximity)
