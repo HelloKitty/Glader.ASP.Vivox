@@ -27,10 +27,13 @@ namespace Glader.ASP.Vivox
 		/// in the provided <see cref="services"/>.
 		/// </summary>
 		/// <param name="services"></param>
+		/// <param name="instance">Optional instance to use instead of using DI to create it.</param>
 		/// <returns></returns>
-		public static IServiceCollection RegisterVivoxTokenServices<TVivoxSignServiceType, TVivoxAPIKeyRepositoryType>(this IServiceCollection services)
+		public static IServiceCollection RegisterVivoxTokenServices<TVivoxSignServiceType, TVivoxAPIKeyRepositoryType, TVivoxClaimsTokenFactoryType>(this IServiceCollection services, 
+			TVivoxClaimsTokenFactoryType instance = null)
 			where TVivoxSignServiceType : class, IVivoxTokenSignService
 			where TVivoxAPIKeyRepositoryType : class, IVivoxAPIKeyRepository
+			where TVivoxClaimsTokenFactoryType : class, IVivoxClaimsTokenFactory
 		{
 			if (services == null) throw new ArgumentNullException(nameof(services));
 			return services.AddTransient<IVivoxTokenSignService, TVivoxSignServiceType>()
@@ -43,13 +46,14 @@ namespace Glader.ASP.Vivox
 		/// Using <see cref="DefaultLocalVivoxTokenSigningService"/> for <see cref="IVivoxTokenSignService"/>.
 		/// </summary>
 		/// <param name="services"></param>
+		/// <param name="instance">Optional instance to use instead of using DI to create it.</param>
 		/// <returns></returns>
-		public static IServiceCollection RegisterVivoxTokenServices<TVivoxAPIKeyRepositoryType>(this IServiceCollection services)
+		public static IServiceCollection RegisterVivoxTokenServices<TVivoxAPIKeyRepositoryType, TVivoxClaimsTokenFactoryType>(this IServiceCollection services,
+			TVivoxClaimsTokenFactoryType instance = null)
 			where TVivoxAPIKeyRepositoryType : class, IVivoxAPIKeyRepository
+			where TVivoxClaimsTokenFactoryType : class, IVivoxClaimsTokenFactory
 		{
-			if(services == null) throw new ArgumentNullException(nameof(services));
-			return services.AddTransient<IVivoxTokenSignService, DefaultLocalVivoxTokenSigningService>()
-				.AddTransient<IVivoxAPIKeyRepository, TVivoxAPIKeyRepositoryType>();
+			return RegisterVivoxTokenServices<DefaultLocalVivoxTokenSigningService, TVivoxAPIKeyRepositoryType, TVivoxClaimsTokenFactoryType>(services, instance);
 		}
 	}
 }
