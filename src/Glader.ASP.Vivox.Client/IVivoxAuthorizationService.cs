@@ -20,9 +20,5 @@ namespace Glader.ASP.Vivox
 		[RequiresAuthentication]
 		[Post("/api/VivoxChannel/proximity/join")]
 		Task<ResponseModel<VivoxChannelJoinResponse, VivoxLoginResponseCode>> JoinProximityChatAsync(CancellationToken token = default);
-
-		[RequiresAuthentication]
-		[Post("/api/VivoxChannel/guild/join")]
-		Task<ResponseModel<VivoxChannelJoinResponse, VivoxLoginResponseCode>> JoinGuildChatAsync(CancellationToken token = default);
 	}
 }
