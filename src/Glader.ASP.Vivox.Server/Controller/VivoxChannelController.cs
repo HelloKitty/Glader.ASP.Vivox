@@ -51,37 +51,6 @@ namespace Glader.ASP.Vivox
 			return Success<VivoxChannelJoinResponse, VivoxLoginResponseCode>(new VivoxChannelJoinResponse(await signService.CreateSignatureAsync(claims, token), claims.DestinationSIPURI));
 		}
 
-		/*[AuthorizeJwt]
-		[NoResponseCache]
-		[HttpPost("guild/join")]
-		public async Task<ResponseModel<VivoxChannelJoinResponse, VivoxLoginResponseCode>> JoinGuildChat(
-			[FromServices] ITrinityCharactersRepository characterSessionRepository,
-			[FromServices] IFactoryCreatable<VivoxTokenClaims, VivoxTokenClaimsCreationContext> claimsFactory,
-			[FromServices] ITrinityGuildMemberRepository guildMembershipRepository,
-			[FromServices] IVivoxTokenSignService signService)
-		{
-			int accountId = this.ClaimsReader.GetAccountId<int>(User);
-
-			//If the user doesn't actually have a claimed session in the game
-			//then we shouldn't log them into Vivox.
-			if(!await characterSessionRepository.AccountHasActiveSessionAsync(accountId))
-				return BuildFailedResponseModel(VivoxLoginResponseCode.NoActiveCharacterSession);
-
-			int characterId = await RetrieveSessionCharacterIdAsync(characterSessionRepository, accountId);
-
-			if(!await guildMembershipRepository.ContainsAsync((uint) characterId))
-				return BuildFailedResponseModel(VivoxLoginResponseCode.ChannelUnavailable);
-
-			int guildId = (int) (await guildMembershipRepository.RetrieveAsync((uint) characterId)).Guildid;
-
-			//TODO: Use a factory for channel name generation maybe?
-			VivoxTokenClaims claims = claimsFactory.Create(new VivoxTokenClaimsCreationContext(characterId, VivoxAction.JoinChannel, new VivoxChannelData(false, $"Guild-{guildId}")));
-
-			//We don't send it back in a JSON form even though it's technically a JSON object
-			//because the client just needs it as a raw string anyway to put through the Vivox client API.
-			return BuildSuccessfulResponseModel(new VivoxChannelJoinResponse(signService.CreateSignature(claims), claims.DestinationSIPURI));
-		}*/
-
 		private static async Task<int> RetrieveSessionCharacterIdAsync(ICharactersDataRepository characterRepository, int accountId)
 		{
 			//TODO: Technically a race condition here.
