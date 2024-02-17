@@ -43,9 +43,9 @@ namespace Glader.ASP.Vivox
 			//Default values found in Vivox source
 			/*_audibleDistance = 32;
 			_conversationalDistance = 1;
-			_audioFadeIntensityByDistance = 1.0f;
+			_audioFadeIntensityByDistance = 2.0f;
 			_audioFadeModel = AudioFadeModel.InverseByDistance;*/
-			string props = context.Channel.IsPositionalChannel ? $"!p-{32}-{1}-{1.0f.ToString("0.000", new System.Globalization.CultureInfo("en-US"))}-{(int)1}" : String.Empty;
+			string props = context.Channel.IsPositionalChannel ? $"!p-{96}-{4}-{1.0f.ToString("0.000", new System.Globalization.CultureInfo("en-US"))}-{(int)1}" : String.Empty;
 			
 			//From ChannelId in the Vivox API assembly: $"sip:confctl-{GetUriDesignator(_type)}-{_issuer}.{_name}{props}@{_domain}"
 			string channelURI = $"sip:confctl-{(context.Channel.IsPositionalChannel ? "d" : "g")}-{VIVOX_ISSUER}.{context.Channel.ChannelName}{props}@{VIVOX_DOMAIN}";
