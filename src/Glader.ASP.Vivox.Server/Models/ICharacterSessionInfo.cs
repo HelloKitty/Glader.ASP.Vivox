@@ -12,11 +12,11 @@ namespace Glader.ASP.Vivox
 		/// <summary>
 		/// The id of the map the character is within.
 		/// </summary>
-		int MapId { get; set; }
+		int MapId { get; }
 
 		/// <summary>
 		/// The optional instance id of the map the character is within.
 		/// </summary>
-		int InstanceId { get; set; }
+		int InstanceId { get; }
 	}
 }
