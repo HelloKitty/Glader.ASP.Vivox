@@ -25,7 +25,7 @@ namespace Glader.ASP.Vivox
 		[HttpPost("proximity/join")]
 		public async Task<ResponseModel<VivoxChannelJoinResponse, VivoxLoginResponseCode>> JoinZoneProximityChat(
 			[FromServices] ICharactersDataRepository characterRepository,
-			[FromServices] IFactoryCreatable<VivoxTokenClaims, VivoxTokenClaimsCreationContext> claimsFactory,
+			[FromServices] IVivoxClaimsTokenFactory claimsFactory,
 			[FromServices] IVivoxTokenSignService signService, CancellationToken token = default)
 		{
 			int accountId = this.ClaimsReader.GetAccountId<int>(User);
