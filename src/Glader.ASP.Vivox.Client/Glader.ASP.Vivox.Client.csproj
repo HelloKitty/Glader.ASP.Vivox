@@ -1,4 +1,4 @@
-<Project Sdk="Microsoft.NET.Sdk">
+﻿<Project Sdk="Microsoft.NET.Sdk">
 
   <PropertyGroup>
     <TargetFramework>netstandard2.0</TargetFramework>
@@ -19,8 +19,8 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <PackageReference Include="Glader.Essentials.Models" Version="2.2.77" />
-    <PackageReference Include="Glader.Essentials.Refit" Version="2.2.77" />
+    <PackageReference Include="Glader.Essentials.Models" Version="2.6.154" />
+    <PackageReference Include="Glader.Essentials.Refit" Version="2.6.154" />
   </ItemGroup>
 
   <ItemGroup>
