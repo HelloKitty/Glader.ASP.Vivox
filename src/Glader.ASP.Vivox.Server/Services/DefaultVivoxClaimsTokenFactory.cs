@@ -5,11 +5,12 @@ namespace Glader.ASP.Vivox
 {
 	public sealed class DefaultVivoxClaimsTokenFactory : IVivoxClaimsTokenFactory
 	{
-		//TODO: Make Issuer configurable
-		private static string VIVOX_ISSUER = "vrguardian-vrg-dev";
+		private IVivoxCredentialsProvider CredentialsProvider { get; }
 
-		//TODO: Make Issuer configurable
-		private static string VIVOX_DOMAIN = "vdx5.vivox.com";
+		public DefaultVivoxClaimsTokenFactory(IVivoxCredentialsProvider credentialsProvider)
+		{
+			CredentialsProvider = credentialsProvider ?? throw new ArgumentNullException(nameof(credentialsProvider));
+		}
 
 		public VivoxTokenClaims Create(VivoxTokenClaimsCreationContext context)
 		{
@@ -20,7 +21,7 @@ namespace Glader.ASP.Vivox
 			switch (context.Action)
 			{
 				case VivoxAction.Login:
-					return new VivoxTokenClaims(VIVOX_ISSUER, ComputeExpiryTime(), actionType, 1, $"sip:.{VIVOX_ISSUER}.{context.CharacterId}.@{VIVOX_DOMAIN}", null, null);
+					return new VivoxTokenClaims(CredentialsProvider.VivoxIssuer, ComputeExpiryTime(), actionType, 1, $"sip:.{CredentialsProvider.VivoxIssuer}.{context.CharacterId}.@{CredentialsProvider.VivoxDomain}", null, null);
 				case VivoxAction.JoinChannel:
 					return HandleChannelJoinTokenCreation(context, actionType);
 				default:
@@ -29,7 +30,7 @@ namespace Glader.ASP.Vivox
 			
 		}
 
-		private static VivoxTokenClaims HandleChannelJoinTokenCreation(VivoxTokenClaimsCreationContext context, string actionType)
+		private VivoxTokenClaims HandleChannelJoinTokenCreation(VivoxTokenClaimsCreationContext context, string actionType)
 		{
 			if (context.Channel == null)
 				throw new ArgumentException($"Provided {nameof(VivoxTokenClaimsCreationContext)} for ChannelJoin lacks channel data.");
@@ -44,8 +45,8 @@ namespace Glader.ASP.Vivox
 			string props = context.Channel.IsPositionalChannel ? $"!p-{96}-{4}-{1.0f.ToString("0.000", new System.Globalization.CultureInfo("en-US"))}-{(int)1}" : String.Empty;
 			
 			//From ChannelId in the Vivox API assembly: $"sip:confctl-{GetUriDesignator(_type)}-{_issuer}.{_name}{props}@{_domain}"
-			string channelURI = $"sip:confctl-{(context.Channel.IsPositionalChannel ? "d" : "g")}-{VIVOX_ISSUER}.{context.Channel.ChannelName}{props}@{VIVOX_DOMAIN}";
-			return new VivoxTokenClaims(VIVOX_ISSUER, ComputeExpiryTime(), actionType, 1, $"sip:.{VIVOX_ISSUER}.{context.CharacterId}.@{VIVOX_DOMAIN}", channelURI, null);
+			string channelURI = $"sip:confctl-{(context.Channel.IsPositionalChannel ? "d" : "g")}-{CredentialsProvider.VivoxIssuer}.{context.Channel.ChannelName}{props}@{CredentialsProvider.VivoxDomain}";
+			return new VivoxTokenClaims(CredentialsProvider.VivoxIssuer, ComputeExpiryTime(), actionType, 1, $"sip:.{CredentialsProvider.VivoxIssuer}.{context.CharacterId}.@{CredentialsProvider.VivoxDomain}", channelURI, null);
 		}
 
 		//We don't currently use this. It was a good idea but may not be supported as usernames for vivox.
