@@ -29,15 +29,25 @@ namespace Glader.ASP.Vivox
 		/// <param name="services"></param>
 		/// <param name="instance">Optional instance to use instead of using DI to create it.</param>
 		/// <returns></returns>
-		public static IServiceCollection RegisterVivoxTokenServices<TVivoxSignServiceType, TVivoxAPIKeyRepositoryType, TVivoxClaimsTokenFactoryType>(this IServiceCollection services, 
-			TVivoxClaimsTokenFactoryType instance = null)
+		public static IServiceCollection RegisterVivoxTokenServices<TVivoxSignServiceType, TVivoxAPIKeyRepositoryType, TVivoxClaimsTokenFactoryType, TVivoxCredentialsProviderType>(this IServiceCollection services,
+			TVivoxCredentialsProviderType instance = null)
 			where TVivoxSignServiceType : class, IVivoxTokenSignService
 			where TVivoxAPIKeyRepositoryType : class, IVivoxAPIKeyRepository
 			where TVivoxClaimsTokenFactoryType : class, IVivoxClaimsTokenFactory
+			where TVivoxCredentialsProviderType : class, IVivoxCredentialsProvider
 		{
 			if (services == null) throw new ArgumentNullException(nameof(services));
-			return services.AddTransient<IVivoxTokenSignService, TVivoxSignServiceType>()
-				.AddTransient<IVivoxAPIKeyRepository, TVivoxAPIKeyRepositoryType>();
+
+			services = services.AddTransient<IVivoxTokenSignService, TVivoxSignServiceType>()
+				.AddTransient<IVivoxAPIKeyRepository, TVivoxAPIKeyRepositoryType>()
+				.AddTransient<IVivoxClaimsTokenFactory, TVivoxClaimsTokenFactoryType>();
+
+			if (instance == default)
+				services = services.AddTransient<IVivoxCredentialsProvider, TVivoxCredentialsProviderType>();
+			else
+				services = services.AddSingleton<IVivoxCredentialsProvider>(instance);
+
+			return services;
 		}
 
 		/// <summary>
@@ -48,12 +58,13 @@ namespace Glader.ASP.Vivox
 		/// <param name="services"></param>
 		/// <param name="instance">Optional instance to use instead of using DI to create it.</param>
 		/// <returns></returns>
-		public static IServiceCollection RegisterVivoxTokenServices<TVivoxAPIKeyRepositoryType, TVivoxClaimsTokenFactoryType>(this IServiceCollection services,
-			TVivoxClaimsTokenFactoryType instance = null)
+		public static IServiceCollection RegisterVivoxTokenServices<TVivoxAPIKeyRepositoryType, TVivoxClaimsTokenFactoryType, TVivoxCredentialsProviderType>(this IServiceCollection services,
+			TVivoxCredentialsProviderType instance = null)
 			where TVivoxAPIKeyRepositoryType : class, IVivoxAPIKeyRepository
 			where TVivoxClaimsTokenFactoryType : class, IVivoxClaimsTokenFactory
+			where TVivoxCredentialsProviderType : class, IVivoxCredentialsProvider
 		{
-			return RegisterVivoxTokenServices<DefaultLocalVivoxTokenSigningService, TVivoxAPIKeyRepositoryType, TVivoxClaimsTokenFactoryType>(services, instance);
+			return RegisterVivoxTokenServices<DefaultLocalVivoxTokenSigningService, TVivoxAPIKeyRepositoryType, TVivoxClaimsTokenFactoryType, TVivoxCredentialsProviderType>(services, instance);
 		}
 	}
 }
