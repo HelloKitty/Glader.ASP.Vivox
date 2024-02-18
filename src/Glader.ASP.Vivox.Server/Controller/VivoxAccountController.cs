@@ -22,7 +22,7 @@ namespace Glader.ASP.Vivox
 
 		[AuthorizeJwt]
 		[NoResponseCache]
-		[HttpPost("Login")]
+		[HttpPost("login")]
 		public async Task<ResponseModel<string, VivoxLoginResponseCode>> LoginVivox([FromServices] ICharactersDataRepository characterRepository,
 			[FromServices] IVivoxClaimsTokenFactory claimsFactory,
 			[FromServices] IVivoxTokenSignService signService, CancellationToken token = default)

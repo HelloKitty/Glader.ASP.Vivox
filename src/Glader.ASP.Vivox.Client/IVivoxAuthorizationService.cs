@@ -14,7 +14,7 @@ namespace Glader.ASP.Vivox
 	public interface IVivoxAuthorizationService
 	{
 		[RequiresAuthentication]
-		[Post("/api/VivoxAccount/Login")]
+		[Post("/api/VivoxAccount/login")]
 		Task<ResponseModel<string, VivoxLoginResponseCode>> LoginAsync(CancellationToken token = default);
 
 		[RequiresAuthentication]
