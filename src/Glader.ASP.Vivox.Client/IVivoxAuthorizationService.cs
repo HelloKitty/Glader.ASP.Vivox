@@ -30,5 +30,14 @@ namespace Glader.ASP.Vivox
 		[RequiresAuthentication]
 		[Get("/api/VivoxChannel/proximity/{mapId}/available")]
 		Task<bool> CanJoinProximityChatAsync([AliasAs("mapId")] int mapId, CancellationToken token = default);
+
+		/// <summary>
+		/// Because Vivox clientside requires knowing the channel name, and cannot derive it from the token, we must
+		/// now also know the name of the channel clientside before trying to join it.
+		/// </summary>
+		/// <returns></returns>
+		[RequiresAuthentication]
+		[Get("/api/VivoxChannel/proximity/name")]
+		Task<ResponseModel<string, VivoxLoginResponseCode>> GetProximityChannelNameAsync(CancellationToken token = default);
 	}
 }

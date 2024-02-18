@@ -44,7 +44,7 @@ namespace Glader.ASP.Vivox
 			//TODO: Support cases where a character is put into a different map than the DB says it should be in
 			//TODO: Support instances, right now all instances share the same channel.
 			//TODO: Use a factory for channel name generation maybe?
-			VivoxTokenClaims claims = claimsFactory.Create(new VivoxTokenClaimsCreationContext(characterId, VivoxAction.JoinChannel, new VivoxChannelData(true, new MapChannelNameBuilder(true, session.MapId).ToString())));
+			VivoxTokenClaims claims = claimsFactory.Create(new VivoxTokenClaimsCreationContext(characterId, VivoxAction.JoinChannel, new VivoxChannelData(true, new MapChannelNameBuilder(true, session.MapId, session.InstanceId).ToString())));
 
 			//We don't send it back in a JSON form even though it's technically a JSON object
 			//because the client just needs it as a raw string anyway to put through the Vivox client API.
@@ -87,6 +87,30 @@ namespace Glader.ASP.Vivox
 
 				return false;
 			}
+		}
+
+		/// <summary>
+		/// Because Vivox clientside requires knowing the channel name, and cannot derive it from the token, we must
+		/// now also know the name of the channel clientside before trying to join it.
+		/// </summary>
+		/// <returns></returns>
+		[AuthorizeJwt]
+		[NoResponseCache]
+		[HttpGet("proximity/name")]
+		public async Task<ResponseModel<string, VivoxLoginResponseCode>> GetProximityChannelNameAsync([FromServices] ICharactersDataRepository characterRepository,
+			CancellationToken token = default)
+		{
+			int accountId = this.ClaimsReader.GetAccountId<int>(User);
+
+			//If the user doesn't actually have a claimed session in the game
+			//then they cannot log into the channel
+			if (!await characterRepository.AccountHasActiveSessionAsync(accountId, token))
+				return Failure<string, VivoxLoginResponseCode>(VivoxLoginResponseCode.NoActiveCharacterSession);
+
+			int characterId = await RetrieveSessionCharacterIdAsync(characterRepository, accountId);
+			ICharacterSessionInfo session = await characterRepository.RetrieveSessionInfoAsync(characterId, token);
+
+			return Success<string, VivoxLoginResponseCode>(new MapChannelNameBuilder(true, session.MapId, session.InstanceId).ToString());
 		}
 
 		private static async Task<int> RetrieveSessionCharacterIdAsync(ICharactersDataRepository characterRepository, int accountId)
