@@ -23,7 +23,7 @@ namespace Glader.ASP.Vivox
 		[AuthorizeJwt]
 		[NoResponseCache]
 		[HttpPost("proximity/join")]
-		public async Task<ResponseModel<VivoxChannelJoinResponse, VivoxLoginResponseCode>> JoinZoneProximityChat(
+		public async Task<ResponseModel<VivoxChannelJoinResponse, VivoxLoginResponseCode>> JoinProximityChatAsync(
 			[FromServices] ICharactersDataRepository characterRepository,
 			[FromServices] IVivoxClaimsTokenFactory claimsFactory,
 			[FromServices] IVivoxTokenSignService signService, CancellationToken token = default)
