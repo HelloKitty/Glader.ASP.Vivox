@@ -51,6 +51,44 @@ namespace Glader.ASP.Vivox
 			return Success<VivoxChannelJoinResponse, VivoxLoginResponseCode>(new VivoxChannelJoinResponse(await signService.CreateSignatureAsync(claims, token), claims.DestinationSIPURI));
 		}
 
+		/// <summary>
+		/// Call this before calling <see cref="JoinProximityChatAsync"/> to check if you're able to join the proximity voice chat channel yet.
+		/// </summary>
+		/// <param name="mapId">The map id to check joining availability.</param>
+		/// <param name="token">Cancel token.</param>
+		/// <returns>True if the provided <see cref="mapId"/> is available to join via <see cref="JoinProximityChatAsync"/>.</returns>
+		[AuthorizeJwt]
+		[NoResponseCache]
+		[HttpGet("proximity/{mapId}/available")]
+		public async Task<bool> CanJoinProximityChatAsync([FromRoute(Name = "mapId")] int mapId,
+			[FromServices] ICharactersDataRepository characterRepository,
+			CancellationToken token = default)
+		{
+			int accountId = this.ClaimsReader.GetAccountId<int>(User);
+
+			//If the user doesn't actually have a claimed session in the game
+			//then they cannot log into the channel
+			if (!await characterRepository.AccountHasActiveSessionAsync(accountId, token))
+				return false;
+
+			try
+			{
+				int characterId = await RetrieveSessionCharacterIdAsync(characterRepository, accountId);
+				ICharacterSessionInfo session = await characterRepository.RetrieveSessionInfoAsync(characterId, token);
+
+				// If they're in the map that they are checking that they want to join
+				// then we should say they can, the client doesn't know the instance id so don't bother checking it.
+				return session.MapId == mapId;
+			}
+			catch (Exception e)
+			{
+				if (Logger.IsEnabled(LogLevel.Error))
+					Logger.LogError($"Failed to check if Account: {accountId} was allowed to join Proximity Chat Channel MapId: {mapId}. Reason: {e}");
+
+				return false;
+			}
+		}
+
 		private static async Task<int> RetrieveSessionCharacterIdAsync(ICharactersDataRepository characterRepository, int accountId)
 		{
 			//TODO: Technically a race condition here.
