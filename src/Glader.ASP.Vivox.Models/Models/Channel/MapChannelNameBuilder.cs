@@ -19,13 +19,22 @@ namespace Glader
 		/// </summary>
 		public int MapId { get; }
 
-		public MapChannelNameBuilder(bool isProximity, int mapId)
+		/// <summary>
+		/// The id of the map instance.
+		/// </summary>
+		public int InstanceId { get; }
+
+		public MapChannelNameBuilder(bool isProximity, int mapId, int instanceId)
 		{
 			// Map zero is considered valid (example, EK)
 			if (mapId < 0) throw new ArgumentOutOfRangeException(nameof(mapId));
 
+			// InstanceId will be 0 potentiall for continents or other non-instanced maps
+			if (instanceId < 0) throw new ArgumentOutOfRangeException(nameof(instanceId));
+
 			IsProximity = isProximity;
 			MapId = mapId;
+			InstanceId = instanceId;
 		}
 
 		/// <summary>
@@ -35,7 +44,7 @@ namespace Glader
 		public override string ToString()
 		{
 			if (IsProximity)
-				return $"Prox-{MapId}";
+				return $"Prox-{MapId}-{InstanceId}";
 
 			throw new NotImplementedException($"TODO: Determine how non-proximity mapid-based channels should be named");
 		}
